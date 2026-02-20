@@ -1,4 +1,4 @@
-# Event Ticketing Chatbot (Basic)
+# Event Ticketing Chatbot 
 
 Simple Python + Streamlit chatbot for event ticketing queries.
 
