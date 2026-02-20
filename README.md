@@ -1,116 +1,75 @@
-🎟 Event Ticketing Chatbot
+# Event Ticketing Chatbot (Basic)
 
-An AI-powered event ticketing assistant built using Streamlit, ScaleDown, and OpenRouter.
+Simple Python + Streamlit chatbot for event ticketing queries.
 
-This chatbot handles event-related queries, enforces strict topic boundaries, compresses chat context efficiently, and generates intelligent responses using LLM inference.
+## Stack
 
-⚡ Built as an MVP demonstration of prompt compression + AI inference pipeline integration.
+- Streamlit (UI)
+- ScaleDown (prompt compression)
+- OpenRouter (chat inference)
 
-🚀 Features
-🎯 Smart Query Handling
+## Setup
 
-Accepts only event-ticketing related queries
+1. Create and activate a virtual environment (optional)
+2. Install dependencies:
 
-Automatically rejects off-topic prompts
+   `pip install -r requirements.txt`
 
-Displays a clear constraint message for invalid inputs
+3. Add keys to local `.env` (auto-loaded):
 
-🧠 Context-Aware AI Responses
+   `SCALEDOWN_API_KEY=your_scaledown_key`
+   `OPENROUTER_API_KEY=your_openrouter_key`
+   `OPENROUTER_MODEL=your_openrouter_model`
 
-Sends recent conversation context to ScaleDown
+4. Run:
 
-Uses compressed prompt for efficient inference
+   `streamlit run app.py`
 
-Generates final answer using OpenRouter
+## Project Structure
 
-📊 AI Diagnostics Display
-
-Shows:
-
-Compression token count
-
-Compression latency
-
-Success status
-
-Whether fallback was used
-
-🛡 Safe Fallback System
-
-If ScaleDown fails to return compressed text
-→ App automatically falls back to original user prompt
-
-If API keys are missing
-→ App stops with clear error message
-
-🏗 Tech Stack
-Layer	Technology
-UI	Streamlit
-Prompt Compression	ScaleDown API
-LLM Inference	OpenRouter
-Environment Management	python-dotenv
-Backend Logic	Python
-📂 Project Structure
+```
 .
-├── app.py
-├── requirements.txt
-├── .env
-└── README.md
-⚙️ Setup Instructions
-1️⃣ (Optional) Create Virtual Environment
-python -m venv venv
-venv\Scripts\activate   # Windows
-2️⃣ Install Dependencies
-pip install -r requirements.txt
-3️⃣ Add API Keys in .env
-SCALEDOWN_API_KEY=your_scaledown_key
-OPENROUTER_API_KEY=your_openrouter_key
-OPENROUTER_MODEL=your_openrouter_model
-4️⃣ Run the Application
-streamlit run app.py
-🧪 Quick Test
-✅ Allowed Query
-How do I book 2 tickets for an event?
-❌ Blocked Query
-How to make biryani?
-🔄 Current Behavior Flow
+├── src/
+│   ├── __init__.py
+│   ├── config.py              # Environment config and API keys
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── scaledown.py       # ScaleDown compression API
+│   │   └── openrouter.py      # OpenRouter chat completions API
+│   └── utils/
+│       ├── __init__.py
+│       └── validators.py      # Topic validation and filtering
+├── app.py                     # Streamlit UI entry point
+├── requirements.txt           # Python dependencies
+├── .env                       # API keys (DO NOT COMMIT)
+├── .env.example               # Template for .env
+├── README.md                  # This file
+└── .gitignore                 # Git ignore rules
+```
 
-User sends query
+## Module Overview
 
-App checks if query is event-related
+- **`src/config.py`**: Loads environment variables and API keys from `.env`
+- **`src/api/scaledown.py`**: Handles prompt compression via ScaleDown API
+- **`src/api/openrouter.py`**: Handles chat completions via OpenRouter API
+- **`src/utils/validators.py`**: Validates if user queries are event-ticketing related
+- **`app.py`**: Main Streamlit UI that orchestrates the chat flow
 
-Sends recent chat context to ScaleDown
+## Current Behavior
 
-Receives compressed prompt
+- Accepts only event-ticketing related questions
+- Rejects off-topic prompts with a clear constraint message
+- Sends recent chat context to ScaleDown for compression
+- Sends compressed prompt to OpenRouter for final answer
+- Shows compression info (`tokens`, `successful`, `latency`, `fallback_used`)
 
-Sends compressed prompt to OpenRouter
+## Notes
 
-Displays AI-generated answer
+- If ScaleDown response does not include compressed text, app falls back to user prompt
+- If keys are missing, app stops with a clear error
+- This is an MVP demo (no database, auth, or real payment flow)
 
-Shows compression metadata
+## Quick Test
 
-📌 Limitations (MVP Scope)
-
-No database integration
-
-No real payment gateway
-
-No authentication system
-
-No persistent session storage
-
-This is a demonstration prototype focused on AI pipeline integration.
-
-💡 Future Improvements
-
-🎟 Event database integration
-
-💳 Payment flow simulation
-
-🔐 User authentication
-
-📈 Booking analytics dashboard
-
-🧠 Intent classification layer
-
-📱 Deployment to Streamlit Cloud / AWS
+- Allowed: `How do I book 2 tickets for an event?`
+- Blocked: `How to make biryani?`
